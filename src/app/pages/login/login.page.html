@@ -1,0 +1,40 @@
+<ion-content>
+  hi
+  <div class="boxLogin" *ngIf="dataLoaded" [formGroup]="formLogin">
+    
+    <div class="boxLogin-body">
+
+      <div>
+        <div class="boxLogin-logo">
+          <img src="/assets/images/logo.svg" alt="logo" />
+        </div>
+        <div class="boxLogin-form">
+          <div class="boxLogin-form-item">
+                <img src="/assets/images/ico-grandfather.svg" alt="Ico user" />
+                <ion-input type="user" placeholder="Usuario" (keypress)="eventHandler($event.keyCode, 'username')"
+                  [(ngModel)]="login.user" formControlName="user" name="user"></ion-input>
+          </div>
+          <div class="boxLogin-form-item mt20">
+            <img src="/assets/images/ico-lock.svg" alt="Ico lock" />
+            <ion-input type="password" placeholder="Contraseña" #password formControlName="password"
+                  (keypress)="eventHandler($event.keyCode, 'password')" [(ngModel)]="login.pass" name="password"></ion-input>
+          </div>
+          <div class="mt30">
+              <button class="btn btn-light w100" (click)="doLogin()">
+                Iniciar sesión
+              </button>
+          </div>
+          <div class="linkForgot">
+              <a href="javascript:void(0)" (click)="recovery()">Recuperar contraseña</a>
+              <span style="display: none;">|</span>
+              <a href="javascript:void(0)" (click)="registro()" style="display: none;">Regístrate</a>
+          </div>
+        </div>
+      </div>
+      <div class="boxLogin-footer">
+        <p>v {{version}} | Powered by Fontventa</p>
+      </div>
+      
+    </div>
+  </div>
+</ion-content>

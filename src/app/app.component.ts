@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -14,5 +15,18 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  constructor(
+    private nav: NavController,
+  ) {}
+
+  async ngOnInit() {
+    await this.initializeApp();
+  }
+    
+  async initializeApp() {
+
+    this.nav.navigateRoot('/login');
+   
+  }
+
 }

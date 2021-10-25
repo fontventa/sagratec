@@ -6,7 +6,7 @@
   },
   "assetGroups": [
     {
-      "name": "Sagratec",
+      "name": "sagratec",
       "installMode": "prefetch",
       "resources": {
         "files": [

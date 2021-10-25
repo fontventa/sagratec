@@ -73,7 +73,7 @@ export class ApiService {
         withCredentials: true
       }
 
-      this.http.post<ResultClass<T>>(this.URL, JSON.stringify(params), options).subscribe(data => {
+      this.http.post<ResultClass<T>>(this.URL + url, JSON.stringify(params), options).subscribe(data => {
         if (data.Error && data.Error.HasError) {
           reject(new Error(data.Error.Message))
         } else {

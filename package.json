@@ -1,8 +1,8 @@
 {
   "name": "sagratec",
-  "version": "1.0.0",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "version": "1.0.1",
+  "author": "Sagratec",
+  "homepage": "https://sagratec.com/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

@@ -1,5 +1,5 @@
 export default class LoginResult {
-    public user: string
-    public pass: string
-    public nombre: string
+    public Resultado: string
+    public Token: string
+    public Error: string
 }

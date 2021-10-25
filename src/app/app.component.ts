@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
+import { GlobalService } from './services/global.service';
+import { SwUpdate } from '@angular/service-worker';
+import { AlertService } from './services/alert.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -15,9 +18,17 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
+  public ready: boolean;
+
   constructor(
     private nav: NavController,
-  ) {}
+    public updates: SwUpdate,
+    public alertService: AlertService,
+    private platform: Platform
+  ) {
+    this.ready = false;
+  }
 
   async ngOnInit() {
     await this.initializeApp();
@@ -27,6 +38,28 @@ export class AppComponent {
 
     this.nav.navigateRoot('/login');
    
+    this.updates.available.subscribe(async event => {      
+      if (event.current != event.available) {
+          try {
+            await this.updates.activateUpdate()
+            document.location.reload()
+          }catch(ex) {
+            console.error(ex)
+            this.alertService.hideLoading();
+          }
+    
+      } else {
+        this.alertService.hideLoading();
+      }
+    })
+    
+    if (this.platform.is('cordova')) {
+      await this.updates.checkForUpdate()
+    }
+
+    GlobalService.readyFired = true;
+    this.ready = true;
+
   }
 
 }

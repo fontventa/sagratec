@@ -15,6 +15,7 @@ export class ApiService {
     public http: HttpClient
   ) { 
 
+    this.URL = "https://apisagratecualc.azurewebsites.net/api";
     this.Login.api = this
 
   }

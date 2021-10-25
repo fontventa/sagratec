@@ -1,0 +1,185 @@
+.ruecaFlotante{
+    position: fixed;
+    top: -66px;
+    right: -120px;
+    z-index: 99;
+    img{
+      height: 270px;
+    }
+  }
+  .boxLogin {
+    position: relative;
+    height: 100%;
+    // background-image: url(/assets/images/bg-login.jpg);
+    background-size: cover;
+    background-position: right bottom;
+    &:after{
+      content: '';
+      // background-image: url('/assets/images/forma-irregular.svg');
+      width: 1049px;
+      height: 834px;
+      z-index: 1;
+      opacity: 0.5;
+      bottom: -51px;
+      position: fixed;
+      left: -79px;
+    }
+  }
+  .boxLogin:before{
+      content: '';
+      width: 100%;
+      height: 100%;
+      /*background-image: linear-gradient(to right top, #1616a8, #1324b2, #102fbc, #0b3ac5, #0645cf, #0645cf, #0645cf, #0645cf, #0b3ac5, #102fbc, #1324b2, #1616a8);*/
+      background-image: linear-gradient(-45deg, rgba(0, 157, 165, 0.58) 30%, rgba(4, 54, 68, 0.65) 45%, rgba(4, 54, 68, 0.65) 70%);
+      position: absolute;
+      opacity: 1;
+      z-index: 1;
+  }
+  .boxLogin-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 9;
+  }
+  .boxLogin-body.centradoVerticalmente{
+    justify-content: center;
+  }
+  .boxLogin-footer{
+      /*position: absolute;
+      z-index: 9;
+      bottom:0;
+      left: 0;
+      right: 0;*/
+      padding: 20px 0 0 0;
+      text-align: center;
+      color: white;
+  }
+  .boxLogin-footer > a{
+      color: white;
+      font-size: 14px;
+      display: inline-block;
+  }
+  .boxLogin-footer p{
+      margin: 0 0 0 0;
+      font-size: 13px;
+  }
+  .boxLogin-logo{
+      text-align: center;
+      margin-bottom: 20px;
+  }
+  .boxLogin-logo > img{
+      height: 39px;
+      width: 100%;
+  }
+  
+  .boxLogin-form{
+    background-color: white;
+    padding: 50px;
+    border-radius: 15px;
+    position: relative;
+    z-index:2;
+  }
+  
+  @media (min-width: 768px){
+      .boxLogin-form{
+          max-width: 402px;
+      }
+  }
+  @media (max-width: 767px){
+      .boxLogin-form{
+          width: 100%;
+      }
+  }
+  .boxLogin-form-item{
+    padding-left: 75px;
+    position: relative;
+    border-bottom: 2px solid #D9D9D9;
+    padding-top: 22px;
+    padding-bottom: 22px;
+    i{
+        font-size: 45px;
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        margin-top: -22px;
+        color: var(--ion-color-primary);
+    }
+  }
+  
+  .boxLogin-form-item ion-input{
+      padding-left: 15px;
+      padding-right: 15px;
+      color: #111;
+  }
+  
+  ion-input{
+    --placeholder-color: black;
+    --placeholder-opacity: 0.7;
+  }
+  /*Fin Login*/
+  
+  .titleForm {
+    margin-bottom: 30px;
+    h2{
+      color: white;
+      text-align: center;
+      font-family: var(--ion-font-secondary);
+      font-size: 40px;
+      font-weight: 600;
+    }
+  }
+  
+  .boxIdiomas{
+    display: flex;
+    justify-content: center;
+    span{
+      margin: 0 10px;
+      color: #ccc
+    }
+    button{
+      font-size: 19px;
+      color: #111;
+      font-weight: normal;
+      background-color: transparent;
+    }
+    button.active{
+      font-weight: 700;
+      color: var(--ion-color-primary);
+      background: transparent;
+    }
+  }
+  @media (max-width: 575.98px) {
+    .boxLogin-form{
+      padding: 30px;
+    }
+    .titleForm h2{
+      font-size: 22px;
+    }
+    .boxLogin-body{
+      padding: 40px;
+    }
+    .ruecaFlotante img{
+      height: 207px;
+    }
+    .boton{
+      font-size: 21px;
+    }
+    .boxIdiomas button{
+      font-size: 15px;
+    }
+    .boxLogin-form-item i{
+      font-size: 34px;
+    }
+    .boxLogin-logo > img{
+      height: 30px;
+    }
+  }
+
+  ion-content{
+    --ion-background-color: var(--ion-color-primary);
+}

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class GlobalService {
 
-  public static version = "1.0.1";
+  public static version = "1.0.2";
   public static backClicked = false;
   public static hideSplash = false;
   public static readyFired = false;

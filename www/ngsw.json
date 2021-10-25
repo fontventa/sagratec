@@ -1,8 +1,8 @@
 {
   "configVersion": 1,
-  "timestamp": 1635168771903,
+  "timestamp": 1635168947881,
   "appData": {
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "index": "/index.html",
   "assetGroups": [
@@ -69,7 +69,7 @@
         "/9921.16514ac17d8f113ae851.js",
         "/common.a4e79676efdf2de52a78.js",
         "/index.html",
-        "/main.6548d18d869675d13905.js",
+        "/main.9f2cfae07fcc7d821764.js",
         "/polyfills-core-js.22269f04014022c4fbd4.js",
         "/polyfills-css-shim.a35a0bb62296f8d990cf.js",
         "/polyfills-dom.8b3809edabc9c7412b52.js",
@@ -151,8 +151,8 @@
     "/assets/icon/favicon.png": "7798b8e0eb61d7375c245af78bbf5c916932bf13",
     "/assets/shapes.svg": "638f87e27e6fc7ddfd6e6b262ea70d690f6c7011",
     "/common.a4e79676efdf2de52a78.js": "98e2788a35ce6c0043b744a4a87125d1e508fc6a",
-    "/index.html": "fa5dfed5875cc2222794385bcaa43b6004b7cf3a",
-    "/main.6548d18d869675d13905.js": "994075055f115acab48e49761d32682e6ab8d16a",
+    "/index.html": "5297d072b19d5dbef02f490ae76137812737b9da",
+    "/main.9f2cfae07fcc7d821764.js": "04ed986f2b8ef2b43f0e67d4f3ce68db9153518a",
     "/polyfills-core-js.22269f04014022c4fbd4.js": "0fde4bf2849e6098c8b3a8ad7098d7ff127f0ca7",
     "/polyfills-css-shim.a35a0bb62296f8d990cf.js": "b8c75dd7bef539567a67d86474fda8427761d575",
     "/polyfills-dom.8b3809edabc9c7412b52.js": "8bac305d027f54b875e4fd1a832d2180db7e8671",

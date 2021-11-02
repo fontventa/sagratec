@@ -1,0 +1,38 @@
+import { Injectable } from '@angular/core';
+import { ApiService } from '../api.service';
+import PresupuestosModel from '../../../models/presupuestos/PresupuestosModel';
+import ClientesDatosFiscalesModel from '../../../models/presupuestos/ClientesDatosFiscalesModel';
+import PresupuestosArchivosModel from '../../../models/presupuestos/PresupuestosArchivosModel';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PresupuestosService {
+  public api: ApiService
+
+  constructor() { }
+
+  public async getDatosPresupuesto(serie: string, presupuesto: string): Promise<PresupuestosModel[]> {
+    const token = this.api.loginToken;
+
+    return await this.api.HttpGet<PresupuestosModel[]>('/PptoDatosGenerales/' + (serie != undefined && serie != null && serie != "" ? serie + "/" : "") + presupuesto, {}, token)
+
+  }
+
+  public async getClienteDatosFiscales(codigo: string): Promise<ClientesDatosFiscalesModel[]> {
+    const token = this.api.loginToken;
+
+    return await this.api.HttpGet<ClientesDatosFiscalesModel[]>('/ClientesDatosFiscales/' + codigo, {}, token)
+
+  }
+
+  public async getFicherosCarpeta(serie: string, presupuesto: string, subdirectorios): Promise<PresupuestosArchivosModel[]> {
+    const token = this.api.loginToken;
+
+    return await this.api.HttpGet<PresupuestosArchivosModel[]>('/ArchivosAFS/Presupuestos/' + (serie != undefined && serie != null && serie != "" ? serie : "") + presupuesto, {
+      subdirectorios: subdirectorios
+    }, token)
+
+  }
+
+}

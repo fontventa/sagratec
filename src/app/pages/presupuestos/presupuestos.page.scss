@@ -1,0 +1,133 @@
+ion-content{
+    --ion-background-color: #f5f5f5;
+}
+ion-toolbar{
+    --background: var(--ion-color-secondary);
+    --border-width: 0;
+    /*--padding-top: 10px;
+    --padding-bottom: 10px;*/
+    --border-color: var(--ion-color-secondary);
+    --color: white;
+}
+.botonLogout{
+    background: transparent;
+    font-size: 28px;
+    color: white;
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    z-index: 99;
+}
+
+.grupodeFichas{
+    display: block;
+    margin: 0;
+    z-index: 2;
+    position: relative;
+    > div{
+        margin: 15px;
+        background-color: white;
+        box-shadow: 0 3px 6px rgb(0 0 0 / 6%);
+        padding: 20px;
+        border-radius: 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .ficha{
+        margin: 15px;
+        background-color: white;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
+        padding: 20px;
+        border-radius: 15px;
+        cursor: pointer;
+        .flex{
+            display: flex;
+            i{
+                color: var(--ion-color-primary);
+                font-size: 30px;
+                margin-right: 14px;
+                margin-top: 4px;
+            }
+            h3{
+                color: var(--ion-color-secondary);
+                font-family: var(--ion-font-secondary);
+                font-size: 20px;
+                margin: 0;
+            }
+            p{
+               font-size: 14px;
+               color: #585858;
+               font-family: var(--ion-font-secondary);
+               margin: 8px 0 0 0;
+            }
+        }
+        button{
+            background: transparent;
+            font-size: 21px;
+            border: 2px solid var(--ion-color-primary);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ion-color-primary);
+            margin-left: 10px;
+        }
+    } 
+}
+
+.rueca3d{
+    position: absolute;
+    left: -20px;
+    bottom: 10px;
+    z-index: 1;
+    img{
+        height: 88px;
+    }
+}
+.rayaFina{
+    position: absolute;
+    right: 58px;
+    bottom: -92px;
+    z-index: 1;
+    height: 203px;
+}
+.rayaNaranja{
+    position: absolute;
+    right: 84px;
+    bottom: -17px;
+    z-index: 1;
+    height: 69px;
+}
+// RESPONSIVE *********************
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 575.98px) {
+    .grupodeFichas{
+        margin: 0px auto 0 auto;
+    }
+    .grupodeFichas .ficha > div {
+        margin: 12px;
+    }
+    .grupodeFichas .ficha > div h3{
+        margin: 1px 0 0 0;
+    }
+    .grupodeFichas .ficha > div p{
+        margin: 9px 0 0 0;
+    }
+    .rayaFina{
+        right: -39px;
+        bottom: -92px;
+    }
+    .rayaNaranja{
+        right: 16px;
+        bottom: -17px;
+    }
+    .rueca3d{
+        img{
+            height: 68px;
+        }
+    }
+}

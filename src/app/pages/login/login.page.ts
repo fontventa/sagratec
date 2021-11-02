@@ -19,9 +19,9 @@ import { AppComponent } from '../../app.component';
 })
 export class LoginPage implements OnInit {
 
-  @ViewChild('password') passwordInput;
   ready: boolean;
   formLogin: FormGroup;
+  codigo: string;
   user: string
   password: string
 
@@ -42,6 +42,7 @@ export class LoginPage implements OnInit {
     this.api.loginToken = localStorage.getItem('token');
 
     this.formLogin = formBuilder.group({
+      codigo: ['', Validators.compose([Validators.required])],
       user: ['', Validators.compose([Validators.required])],
       password: ['', Validators.compose([Validators.required])],
     });
@@ -53,28 +54,28 @@ export class LoginPage implements OnInit {
   ngOnInit() {
 
     this.globalVar = GlobalService;
-    //this.doAutoLogin();
+    this.doAutoLogin();
 
   }
 
   async doLogin() {
 
     try {
-      if (this.password && this.password.toString().trim().length > 0 && this.user && this.user.toString().trim().length > 0) {
-        //if (UtilService.isValidEmail(this.user) || this.user == "Administrador") {
+      if (this.password && this.password.toString().trim().length > 0 && this.user && this.user.toString().trim().length > 0 &&
+        this.codigo && this.codigo.toString().trim().length > 0) {
 
         await this.alertService.showLoading('Iniciando sesión...');
 
-        const user = await this.api.Login.login(this.user, this.password);
+        const loginRes = await this.api.Login.login(this.codigo, this.user, this.password);
 
-        if (user && user.Token) {
+        if (loginRes && loginRes.Token) {
 
-          await this.api.Login.setLogin(user)
-
-          //await AppComponent.instance.executeMenu()
+          this.api.Login.setLogin(loginRes, this.codigo, this.user, this.password);
 
           this.alertService.hideLoading();
-          this.navCtrl.navigateRoot('maquinas-list');
+
+          await AppComponent.instance.executeMenu();
+          this.navCtrl.navigateRoot('presupuestos');
 
         } else {
           localStorage.setItem('token', '');
@@ -82,79 +83,64 @@ export class LoginPage implements OnInit {
           // this.splashScreen.hide();
           this.alertService.showToastError('Usuario o contraseña incorrectos.');
         }
-        // } else {
-        //   GlobalService.hideSplash = true;
-        //   // this.splashScreen.hide();
-        //   this.alertService.showToastError('Debes especificar un email válido');
-        // }
       }
     } catch (ex) {
-      this.alertService.showToastError(ex.message);
+      this.alertService.showToastError("Usuario o contraseña incorrectos");
       GlobalService.hideSplash = true;
-      // this.splashScreen.hide();
-    } finally {
+
       await this.alertService.hideLoading();
     }
+
   }
 
-  // async doAutoLogin() {
+  async doAutoLogin() {
 
-  //   try {
+    try {
 
-  //     this.api.loginToken = localStorage.getItem('token');
+      const token = localStorage.getItem('token');
+      this.api.loginToken = token;
 
-  //     if (this.api.loginToken != null && this.api.loginToken != undefined && this.api.loginToken != "") {
+      const ogidoccetargas = localStorage.getItem('ogidoccetargas');
+      const emanresucetargas = localStorage.getItem('emanresucetargas');
+      const drowssapcetargas = localStorage.getItem('drowssapcetargas');
 
-  //       await this.alertService.showLoading('Cargando...');
-  //       const user = await this.api.Login.loginWithToken(this.api.loginToken);
+      if (token != null && token != undefined && token != "" &&
+        ogidoccetargas != null && ogidoccetargas != undefined && ogidoccetargas != "" &&
+        emanresucetargas != null && emanresucetargas != undefined && emanresucetargas != "" &&
+        drowssapcetargas != null && drowssapcetargas != undefined && drowssapcetargas != "") {
 
-  //       if (user && user.Token) {
-  //         await this.api.Login.setLogin(user)
+        await this.alertService.showLoading('Iniciando sesión...');
+        const loginRes = await this.api.Login.login(ogidoccetargas, emanresucetargas, drowssapcetargas);
 
-  //         await AppComponent.instance.executeMenu()
+        if (loginRes && loginRes.Token) {
 
-  //         this.alertService.hideLoading();
-  //         this.navCtrl.navigateRoot('maquinas-list');
+          this.api.Login.setLogin(loginRes, ogidoccetargas, emanresucetargas, drowssapcetargas);
 
-  //       } else {
-  //         localStorage.setItem('token', '');
-  //         GlobalService.hideSplash = true;
-  //         // this.splashScreen.hide();
-  //         this.alertService.showToastError('Usuario o contraseña incorrectos.');
-  //       }
+          this.alertService.hideLoading();
 
-  //     }
+          await AppComponent.instance.executeMenu();
+          this.navCtrl.navigateRoot('presupuestos');
 
-  //   } catch (ex) {
-  //     //this.alertService.showToastError(ex.message);
-  //     GlobalService.hideSplash = true;
-  //     this.api.loginToken = "";
-  //     localStorage.setItem('token', '');
-  //   } finally {
-  //     await this.alertService.hideLoading();
-  //   }
+        } else {
 
-  // }
+          throw "Error en el login";
 
-  eventHandler(keyCode, control) {
-    if (keyCode == 13) {
-      switch (control) {
-        case 'email':
-          this.passwordInput.setFocus();
-          break;
-        case 'password':
-          this.doLogin();
-          break;
+        }
+
       }
+
+    } catch (ex) {
+      console.log(ex)
+      //this.alertService.showToastError(ex.message);
+      GlobalService.hideSplash = true;
+
+      this.api.Login.logOut();
+      this.navParams.clear(true);
+
+      await this.alertService.hideLoading();
+
     }
-  }
 
-  async registro() {
-    await this.navCtrl.navigateForward('register');
-  }
-
-  async provocarError() {
-    //throw new Error('Prueba Error Sentry')
   }
 
 }

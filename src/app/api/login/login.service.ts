@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import LoginResult from '../../../models/login/loginResult.model';
+import UserModel from '../../../models/login/UserModel';
 
 @Injectable({
   providedIn: 'root'
@@ -8,32 +9,48 @@ import LoginResult from '../../../models/login/loginResult.model';
 export class LoginService {
   public api: ApiService
 
-  public usuario: LoginResult;
+  public usuario: UserModel;
 
   constructor() { }
 
-  public async login(username: string, password: string): Promise<LoginResult> {
+  public async login(codigo: string, user: string, password: string): Promise<LoginResult> {
     return await this.api.HttpPost<LoginResult>('/sagrateclogin', {
       PrefijoLicencia: "4520",
-      CodigoCliente: "0",
-      User: username,
+      CodigoCliente: codigo,
+      User: user,
       Clave: password
     })
   }
 
-  public setLogin(user: LoginResult): Promise<void> {
-    return new Promise((resolve, reject) => {
-        try {
-            this.usuario = user;
-            this.api.loginToken = user.Token;
-            localStorage.setItem('token', user.Token)
-            resolve()
+  public setLogin(loginRes: LoginResult, codigo: string, user: string, password: string) {
+    this.usuario = new UserModel;
 
-        } catch (ex) {
-            reject(new Error(ex.message))
-        }
+    this.usuario.NombreCompleto = user;
+    this.usuario.Codigo = codigo;
+    this.usuario.Token = loginRes.Token;
 
-    })
-}
+    this.api.loginToken = loginRes.Token;
+
+    localStorage.setItem('token', loginRes.Token);
+    localStorage.setItem('ogidoccetargas', codigo);
+    localStorage.setItem('emanresucetargas', user);
+    localStorage.setItem('drowssapcetargas', password);
+
+    this.api.logged = true;
+  }
+
+  public logOut() {
+
+    this.api.logged = false;
+    this.api.Login.usuario = null;
+    this.api.loginToken = null;
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('ogidoccetargas');
+    localStorage.removeItem('emanresucetargas');
+    localStorage.removeItem('drowssapcetargas');
+
+  }
+
 
 }

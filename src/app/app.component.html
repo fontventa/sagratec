@@ -1,29 +1,75 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
-      <ion-content>
-        <ion-list id="inbox-list">
-          <ion-list-header>Inbox</ion-list-header>
-          <ion-note>hi@ionicframework.com</ion-note>
 
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
-              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
+  <ion-split-pane contentId="main-content" when="(max-width: 575px)">
+    <ion-menu contentId="main-content" class="menuCustom" type="overlay">
+      <ion-content class="menuContentContainerCustom">
+        <div class="menuContentCustom">
+          <div class="box-top">
+            <div class="boxTopMenu" *ngIf="api.logged">
 
-        <ion-list id="labels-list">
-          <ion-list-header>Labels</ion-list-header>
+              <div class="fav-icon">
+                <i class="far fa-user"></i>
+              </div>
 
-          <ion-item *ngFor="let label of labels" lines="none">
-            <ion-icon slot="start" ios="bookmark-outline" md="bookmark-sharp"></ion-icon>
-            <ion-label>{{ label }}</ion-label>
-          </ion-item>
-        </ion-list>
+              <div class="box-text" *ngIf="api.Login.usuario != null">
+                <p class="nombre-menu">{{api.Login.usuario.NombreCompleto}}</p>
+              </div>
+
+            </div>
+            <ion-list id="inbox-list" class="listMenu">
+
+              <ion-menu-toggle auto-hide="false" *ngFor="let p of pages; let i = index">
+
+                <ion-item class="itemMenu" (click)="selectedIndex = i; p.execute()" routerDirection="root" [routerLink]="[p.url]" lines="none"
+                  *ngIf="p.visible && !p.boton" detail="false">
+                  <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center " style="padding-left: 20px;">
+                      <i class="{{p.icon}}"></i>
+                      <ion-label class="ml-3">{{ p.title }}</ion-label>
+                    </div>
+                    <ion-icon name="chevron-forward"></ion-icon>
+                  </div>
+                  <ion-icon name="chevron-forward" style="display: none;"></ion-icon>
+                </ion-item>
+
+                <ion-item class="itemMenu" (click)="selectedIndex = i; p.execute()" lines="none" *ngIf="p.visible && p.boton" detail="false">
+                  <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center " style="padding-left: 20px;">
+                      <!--<ion-icon slot="start" [name]="p.icon"></ion-icon>-->
+                      <i class="{{p.icon}}"></i>
+                      <ion-label class="ml-3">{{ p.title }}</ion-label>
+                    </div>
+                    <ion-icon name="chevron-forward"></ion-icon>
+                  </div>
+                  <ion-icon name="chevron-forward" style="display: none;"></ion-icon>
+                </ion-item>
+
+              </ion-menu-toggle>
+
+            </ion-list>
+          </div>
+          <div>
+            <div class="footerMenu">
+              <div class="box-text">
+                <p>
+                  v {{version}} | &#169; Sagratec
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </ion-content>
     </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
+    <ion-router-outlet id="main-content" [swipeGesture]="true">
+      <div class="spinner-container spinnerCustom" *ngIf="alertService.globalSearching.length > 0">
+        <ion-spinner></ion-spinner>
+        <p class="mt-2">{{alertService.globalSearchingText}}</p>
+      </div>
+    </ion-router-outlet>
   </ion-split-pane>
 </ion-app>
+<!-- 
+<ion-app>
+  <ion-router-outlet></ion-router-outlet>
+</ion-app> -->

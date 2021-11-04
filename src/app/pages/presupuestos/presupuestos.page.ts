@@ -7,6 +7,7 @@ import { ApiService } from '../../api/api.service';
 import PresupuestosSeriesModel from '../../../models/presupuestos/PresupuestosSeriesModel';
 import { NgxPicaService } from '@digitalascetic/ngx-pica';
 import heic2any from "heic2any";
+import PresupuestosArchivosModel from '../../../models/presupuestos/PresupuestosArchivosModel';
 
 @Component({
   selector: 'app-presupuestos',
@@ -17,6 +18,7 @@ export class PresupuestosPage implements OnInit {
 
   public Presupuesto: PresupuestosModel;
   public carpetaFicheros: string;
+  public mantenerNombres: boolean;
   public series: PresupuestosSeriesModel[];
 
   public buscando: boolean;
@@ -34,6 +36,7 @@ export class PresupuestosPage implements OnInit {
   ) {
     this.Presupuesto = new PresupuestosModel;
     this.carpetaFicheros = "";
+    this.mantenerNombres = false;
     this.series = [];
 
     this.buscando = false;
@@ -44,6 +47,7 @@ export class PresupuestosPage implements OnInit {
       Serie: ['', Validators.compose([Validators.nullValidator])],
       Presupuesto: ['', Validators.compose([Validators.nullValidator])],
       doc: ['', Validators.compose([Validators.nullValidator])],
+      MantenerNombres: ['', Validators.compose([Validators.nullValidator])],
     });
   }
 
@@ -111,6 +115,8 @@ export class PresupuestosPage implements OnInit {
 
     this.Presupuesto.Serie = "";
     this.Presupuesto.Presupuesto = "";
+    this.carpetaFicheros = "";
+    this.mantenerNombres = false;
 
     this.buscando = false;
 
@@ -125,6 +131,52 @@ export class PresupuestosPage implements OnInit {
       this.carpetaFicheros = carpetaSel;
 
       this.Presupuesto.archivos = await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, carpetaSel);
+
+    } catch (ex) {
+      await this.alertService.showToastError(ex.Message);
+    }
+
+    await this.alertService.hideLoading();
+
+  }
+
+  async descargarFichero(fichero: PresupuestosArchivosModel) {
+
+    try {
+
+      await this.alertService.showLoading('Descargando fichero...');
+
+      const data = await this.service.Presupuesto.downloadFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros, fichero.NombreCompleto);
+
+      const blob: File = new File([data], fichero.NombreCompleto);
+
+      var a = document.createElement('a');
+      var url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = fichero.NombreCompleto;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (ex) {
+      console.log(ex)
+      await this.alertService.showToastError(ex.Message);
+    }
+
+    await this.alertService.hideLoading();
+
+  }
+
+  async borrarFichero(fichero: PresupuestosArchivosModel) {
+
+    try {
+
+      await this.alertService.showLoading('Borrando fichero...');
+
+      this.Presupuesto.archivos = await this.service.Presupuesto.deleteFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros, fichero.NombreCompleto);
+
+      await this.alertService.showToast("Fichero borrado correctamente");
 
     } catch (ex) {
       await this.alertService.showToastError(ex.Message);
@@ -179,7 +231,9 @@ export class PresupuestosPage implements OnInit {
           for (let i = 0; i < filesResult.length; i++) {
             let item = filesResult[i];
             //Cambiamos el nombre del archivo
-            item = new File([item], this.generarFileName(i, item.name.match(/\.[0-9a-z]+$/i)[0]));
+            if (!this.mantenerNombres) {
+              item = new File([item], this.generarFileName(i, item.name.match(/\.[0-9a-z]+$/i)[0]));
+            }
 
             formData.append(item.name, item);
           }
@@ -187,18 +241,13 @@ export class PresupuestosPage implements OnInit {
         }
 
         //Subimos los ficheros
-        const res = await this.service.Presupuesto.postSubirFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros, formData);
-
-        //Recargamos los ficheros
-        this.Presupuesto.archivos = await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros);
+        this.Presupuesto.archivos = await this.service.Presupuesto.postSubirFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros, formData);
 
         //Limpiamos el imput
         input['value'] = "";
         await this.alertService.hideLoading();
 
       } catch (ex) {
-
-        console.log(ex)
 
         this.alertService.showToastError("Ha ocurrido un error al subir los ficheros")
         input['value'] = "";
@@ -296,7 +345,7 @@ export class PresupuestosPage implements OnInit {
     return new File([theBlob], fileName);
   }
 
-  generarFileName(iteration: number, fileExtension:string): string {
+  generarFileName(iteration: number, fileExtension: string): string {
 
     let res = "";
 

@@ -30,7 +30,7 @@
       width: 100%;
       height: 100%;
       /*background-image: linear-gradient(to right top, #1616a8, #1324b2, #102fbc, #0b3ac5, #0645cf, #0645cf, #0645cf, #0645cf, #0b3ac5, #102fbc, #1324b2, #1616a8);*/
-      background-image: linear-gradient(-45deg, rgba(0, 157, 165, 0.58) 30%, rgba(4, 54, 68, 0.65) 45%, rgba(4, 54, 68, 0.65) 70%);
+      background-image: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(201,112,203,1) 0%, rgba(144,78,145,1) 100%);
       position: absolute;
       opacity: 1;
       z-index: 1;
@@ -73,7 +73,6 @@
       margin-bottom: 20px;
   }
   .boxLogin-logo > img{
-      height: 39px;
       width: 100%;
   }
   
@@ -83,6 +82,12 @@
     border-radius: 15px;
     position: relative;
     z-index:2;
+  }
+
+  .figureApp {
+	position: absolute;
+    top: 0;
+    left: -36px;
   }
   
   @media (min-width: 768px){
@@ -175,9 +180,7 @@
     .boxLogin-form-item i{
       font-size: 34px;
     }
-    .boxLogin-logo > img{
-      height: 30px;
-    }
+    
   }
 
   ion-content{

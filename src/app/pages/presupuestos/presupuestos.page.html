@@ -22,7 +22,11 @@
 
         <ion-item>
           <ion-label>Numero de serie</ion-label>
-          <ion-input formControlName="Serie" [(ngModel)]="Presupuesto.Serie" [disabled]="buscando"></ion-input>
+          <ion-select formControlName="Serie" [(ngModel)]="Presupuesto.Serie" interface="popover" [disabled]="buscando">
+            <ion-select-option *ngFor="let item of series" [value]="item.Serie">
+              {{item.Serie}}
+            </ion-select-option>
+          </ion-select>
         </ion-item>
 
         <ion-item>
@@ -54,10 +58,18 @@
             <ion-label>Selecciona el tipo de fichero a subir</ion-label>
           </ion-item>
 
-          <ion-button (click)="loadArchivos('Instalaciones');">Instalaciones</ion-button>
-          <ion-button (click)="loadArchivos('Conformes');">OTT</ion-button>
-          <ion-button (click)="loadArchivos('Medidas');">Hoja de medidas</ion-button>
+          <ion-item>
+            <ion-button (click)="loadArchivos('Instalaciones');">Instalaciones</ion-button>
+            <ion-button (click)="loadArchivos('Conformes');">OTT</ion-button>
+            <ion-button (click)="loadArchivos('Medidas');">Hoja de medidas</ion-button>
+          </ion-item>
 
+          <ion-item *ngIf="carpetaFicheros != undefined && carpetaFicheros != null && carpetaFicheros != ''">
+            <ion-button (click)="performClick('inputFile')">Subir ficheros</ion-button>
+
+            <input id="inputFile" style="display: none;" multiple type="file" no-margin formControlName="doc" onchange="callbackSubirFichero();"
+            />
+          </ion-item>
           <ion-item *ngFor="let fic of Presupuesto.archivos">
             <ion-label>{{fic.Nombre}}</ion-label>
           </ion-item>

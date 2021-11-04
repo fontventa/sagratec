@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import ResultClass from '../../models/general/result.model';
 import { NavController } from '@ionic/angular';
 import { PresupuestosService } from './presupuestos/presupuestos.service';
+import * as $ from "jquery";
+import { JQueryStyleEventEmitter } from 'rxjs/internal/observable/fromEvent';
 
 @Injectable({
   providedIn: 'root'
@@ -91,6 +93,7 @@ export class ApiService {
       }
 
       params = params || {}
+
       const options = {
         headers: headers,
         withCredentials: true
@@ -120,6 +123,34 @@ export class ApiService {
       })
 
     })
+  }
+
+  public PerformRequest<T>(URL: string, options: JQuery.AjaxSettings<any>, token?: string): Promise<T> {
+    return new Promise<any>((resolve, reject) => {
+
+      // Realiza el request solicitado.
+      let headers = options.headers || {};
+      if (token != null && token != undefined && token != "") {
+        headers["SgtToken"] = token;
+      }
+      options.headers = headers;
+      $.ajax(this.URL + URL, options).done((result: T) => {
+        resolve(result);
+      }).fail((err: any) => {
+        if (err.status == 403 && URL != '/sagrateclogin') {
+          this.navCtrl.navigateRoot("login");
+        } else {
+          if (err.error.Message) {
+            reject({ Message: err.error.Message });
+          } else if (err.error.Caption) {
+            reject({ Message: err.error.Caption });
+          }
+
+          reject(err);
+        }
+      })
+
+    });
   }
 
 }

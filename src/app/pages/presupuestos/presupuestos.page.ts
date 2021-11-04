@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { AlertService } from '../../services/alert.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import PresupuestosModel from '../../../models/presupuestos/PresupuestosModel';
 import { ApiService } from '../../api/api.service';
+import PresupuestosSeriesModel from '../../../models/presupuestos/PresupuestosSeriesModel';
+import { NgxPicaService } from '@digitalascetic/ngx-pica';
+import heic2any from "heic2any";
 
 @Component({
   selector: 'app-presupuestos',
@@ -13,8 +16,10 @@ import { ApiService } from '../../api/api.service';
 export class PresupuestosPage implements OnInit {
 
   public Presupuesto: PresupuestosModel;
-  public buscando: boolean;
   public carpetaFicheros: string;
+  public series: PresupuestosSeriesModel[];
+
+  public buscando: boolean;
 
   public ready: boolean;
   public myForm: FormGroup;
@@ -24,8 +29,13 @@ export class PresupuestosPage implements OnInit {
     public alertService: AlertService,
     private formBuilder: FormBuilder,
     public service: ApiService,
+    public zone: NgZone,
+    private ngxPicaService: NgxPicaService
   ) {
     this.Presupuesto = new PresupuestosModel;
+    this.carpetaFicheros = "";
+    this.series = [];
+
     this.buscando = false;
 
     this.menuCtrl.enable(true);
@@ -33,6 +43,7 @@ export class PresupuestosPage implements OnInit {
     this.myForm = formBuilder.group({
       Serie: ['', Validators.compose([Validators.nullValidator])],
       Presupuesto: ['', Validators.compose([Validators.nullValidator])],
+      doc: ['', Validators.compose([Validators.nullValidator])],
     });
   }
 
@@ -44,10 +55,14 @@ export class PresupuestosPage implements OnInit {
 
     await this.alertService.showLoading('Cargando...');
 
-    // var me = this;
-    // window["callbackSubirFichero"] = () => {
-    //   this.enviarFichero.call(me);
-    // }
+    //Ficheros
+    var me = this;
+    window["callbackSubirFichero"] = (e: any) => {
+      this.enviarFichero.call(me);
+    }
+
+    //Cargamos las series
+    this.series = await this.service.Presupuesto.getNumerosSerie();
 
     this.ready = true
 
@@ -118,5 +133,173 @@ export class PresupuestosPage implements OnInit {
     await this.alertService.hideLoading();
 
   }
+
+  //#region Ficheros
+
+  public performClick(elemId) {
+
+    var elem = document.getElementById(elemId);
+
+    if (elem && document.createEvent) {
+
+      var evt = document.createEvent("MouseEvents");
+
+      evt.initEvent("click", true, false);
+
+      elem.dispatchEvent(evt);
+
+    }
+
+  }
+
+  public enviarFichero() {
+
+    this.zone.run(async () => {
+
+      let input: any = document.querySelector('#inputFile');
+
+      try {
+
+        await this.alertService.showLoading("Subiendo ficheros...");
+
+        const files = input["files"];
+        let formData = new FormData();
+
+        if (files.length > 0) {
+
+          let filesResult: any[] = [];
+
+          for (let i = 0; i < files.length; i++) {
+            const item = files[i];
+            filesResult.push(item);
+          }
+
+          filesResult = await this.comprimeImagenes(filesResult);
+
+          for (let i = 0; i < filesResult.length; i++) {
+            const item = filesResult[i];
+            console.log(item.name)
+            formData.append(item.name, item);
+          }
+
+        }
+
+        //Subimos los ficheros
+        const res = await this.service.Presupuesto.postSubirFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros, formData);
+
+        //Recargamos los ficheros
+        this.Presupuesto.archivos = await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros);
+
+        //Limpiamos el imput
+        input['value'] = "";
+        await this.alertService.hideLoading();
+
+      } catch (ex) {
+
+        this.alertService.showToastError("Ha ocurrido un error al subir los ficheros")
+        input['value'] = "";
+
+        await this.alertService.hideLoading();
+
+      }
+
+    });
+
+  }
+
+  async comprimeImagenes(files: any[]): Promise<any[]> {
+    return new Promise<any[]>(async (resolve, reject) => {
+      //Añadimos los ficheros que no sean imagenes directamente al result
+      let result: any[] = files.filter(f => !((/\.(gif|jpe?g|tiff?|png|webp|bmp|heic|heif)$/i).test(f.name)));
+      //Adaptamos las imagenes
+      let filesConverted: any[] = [];
+      filesConverted = await this.convertImagenes(files.filter(f => (/\.(gif|jpe?g|tiff?|png|webp|bmp|heic|heif)$/i).test(f.name)));
+
+      if (filesConverted.length > 0){
+
+        this.ngxPicaService.resizeImages(filesConverted, 1200, 880).subscribe({
+          next: (imageResized: File) => {
+            // console.log(imageResized)
+            let name = imageResized["name"];
+            result.push(this.blobToFile(imageResized, name))
+          },
+          error: error => {
+            console.log(error);
+            reject("Error al comrpimir la imagen");
+          },
+          complete: () => {
+            console.log(result)
+            resolve(result);
+          }
+        });
+
+      } else {
+
+        resolve(result);
+
+      }
+
+    });
+  }
+
+  async convertImagenes(files: any[]): Promise<File[]> {
+    return new Promise<File[]>(async (resolve, reject) => {
+      let resultConverted: File[] = [];
+      for (const file of files) {
+        let fileConverted = await this.convertImage(file);
+        if (fileConverted) {
+          resultConverted.push(fileConverted);
+        }
+      }
+      resolve(resultConverted);
+    });
+  }
+
+  async convertImage(f: File): Promise<File> {
+    return new Promise<File>((resolve, reject) => {
+
+      if (!f) {
+        //Handle error and exit
+        resolve(null)
+      }
+
+      let blob: Blob = f;
+      let file: File = f;
+
+      //CONVERT HEIC TO JPG
+      //if (/image\/hei(c|f)/.test(f.type)) {
+      if (/hei(c|f)/.test(f.name.substring(f.name.lastIndexOf(".")))) {
+        heic2any({
+          blob,
+          toType: "image/jpeg"
+        }).then((jpgBlob: Blob) => {
+          //Change the name of the file according to the new format
+          let newName = f.name.replace(/\.[^/.]+$/, ".jpg");
+          //Convert blob back to file
+          file = this.blobToFile(jpgBlob, newName);
+          resolve(file);
+        }).catch(err => {
+          resolve(null);
+          //Handle error
+        });
+      } else {
+        //This is not a HEIC image so we can just resolve
+        resolve(f);
+      }
+    });
+  }
+
+  private blobToFile = (theBlob: Blob, fileName: string): File => {
+    return new File([theBlob], fileName);
+
+    let b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModified = new Date();
+    b.name = fileName;
+    //Cast to a File() type
+    return <File>b;
+  }
+
+  //#endregion
 
 }

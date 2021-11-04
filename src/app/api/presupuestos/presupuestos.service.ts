@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import PresupuestosModel from '../../../models/presupuestos/PresupuestosModel';
 import ClientesDatosFiscalesModel from '../../../models/presupuestos/ClientesDatosFiscalesModel';
 import PresupuestosArchivosModel from '../../../models/presupuestos/PresupuestosArchivosModel';
+import PresupuestosSeriesModel from '../../../models/presupuestos/PresupuestosSeriesModel';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +27,32 @@ export class PresupuestosService {
 
   }
 
-  public async getFicherosCarpeta(serie: string, presupuesto: string, subdirectorios): Promise<PresupuestosArchivosModel[]> {
+  public async getFicherosCarpeta(serie: string, presupuesto: string, subdirectorios: string): Promise<PresupuestosArchivosModel[]> {
     const token = this.api.loginToken;
 
     return await this.api.HttpGet<PresupuestosArchivosModel[]>('/ArchivosAFS/Presupuestos/' + (serie != undefined && serie != null && serie != "" ? serie : "") + presupuesto, {
       subdirectorios: subdirectorios
+    }, token)
+
+  }
+
+  public async getNumerosSerie(): Promise<PresupuestosSeriesModel[]> {
+    const token = this.api.loginToken;
+
+    return await this.api.HttpGet<PresupuestosSeriesModel[]>('/Contadores/GetListByDocument/Presupuesto', {}, token)
+
+  }
+
+  public async postSubirFicherosCarpeta(serie: string, presupuesto: string, subdirectorios: string, files: any): Promise<PresupuestosArchivosModel[]> {
+    const token = this.api.loginToken;
+
+    return await this.api.PerformRequest<PresupuestosArchivosModel[]>('/ArchivosAFS/UploadFiles/Presupuestos/' + (serie != undefined && serie != null && serie != "" ? serie : "") + presupuesto + "/?subdirectorios=" + subdirectorios, {
+      method: 'POST',
+      type: 'POST',
+      data: files,
+      contentType: false,
+      processData: false,
+      cache: false
     }, token)
 
   }

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { PresupuestosPageRoutingModule } from './presupuestos-routing.module';
 
 import { PresupuestosPage } from './presupuestos.page';
+import { NgxPicaModule } from '@digitalascetic/ngx-pica';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { PresupuestosPage } from './presupuestos.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    PresupuestosPageRoutingModule
+    PresupuestosPageRoutingModule,
+    NgxPicaModule
   ],
   declarations: [PresupuestosPage]
 })

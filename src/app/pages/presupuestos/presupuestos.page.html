@@ -59,7 +59,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Instalaciones'}">Instalaciones</ion-button>
+            <ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Instalaciones', 'pruebas': true}">Instalaciones</ion-button>
             <ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Conformes'}">OTT</ion-button>
             <ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Medidas'}">Hoja de medidas</ion-button>
           </ion-item>

@@ -8,6 +8,7 @@ import PresupuestosSeriesModel from '../../../models/presupuestos/PresupuestosSe
 import { NgxPicaService } from '@digitalascetic/ngx-pica';
 import heic2any from "heic2any";
 import PresupuestosArchivosModel from '../../../models/presupuestos/PresupuestosArchivosModel';
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-presupuestos',
@@ -146,18 +147,28 @@ export class PresupuestosPage implements OnInit {
 
       await this.alertService.showLoading('Descargando fichero...');
 
-      const data = await this.service.Presupuesto.downloadFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros, fichero.NombreCompleto);
+      await $.ajax({
+        type: "GET",
+        url: this.service.URL + '/ArchivosAFS/DownloadFile/Presupuestos/' + (this.Presupuesto.Serie != undefined && this.Presupuesto.Serie != null && this.Presupuesto.Serie != "" ? this.Presupuesto.Serie : "") + this.Presupuesto.Presupuesto + "/?subdirectorios=" + this.carpetaFicheros + "&archivo=" + fichero.NombreCompleto,
+        headers: {
+          'sgtToken': this.service.loginToken
+        },
+        xhrFields: {
+          responseType: 'blob'
+        },
+        success: function (blob) {
+          var windowUrl = window.URL || window["webkitURL"];
+          var url = windowUrl.createObjectURL(blob);
 
-      const blob: File = new File([data], fichero.NombreCompleto);
-
-      var a = document.createElement('a');
-      var url = window.URL.createObjectURL(blob);
-      a.href = url;
-      a.download = fichero.NombreCompleto;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
+          var link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fichero.NombreCompleto;
+          link.click();
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      });
 
     } catch (ex) {
       console.log(ex)

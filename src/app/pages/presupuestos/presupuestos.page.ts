@@ -177,8 +177,10 @@ export class PresupuestosPage implements OnInit {
           filesResult = await this.comprimeImagenes(filesResult);
 
           for (let i = 0; i < filesResult.length; i++) {
-            const item = filesResult[i];
-            console.log(item.name)
+            let item = filesResult[i];
+            //Cambiamos el nombre del archivo
+            item = new File([item], this.generarFileName(i, item.name.match(/\.[0-9a-z]+$/i)[0]));
+
             formData.append(item.name, item);
           }
 
@@ -195,6 +197,8 @@ export class PresupuestosPage implements OnInit {
         await this.alertService.hideLoading();
 
       } catch (ex) {
+
+        console.log(ex)
 
         this.alertService.showToastError("Ha ocurrido un error al subir los ficheros")
         input['value'] = "";
@@ -215,11 +219,10 @@ export class PresupuestosPage implements OnInit {
       let filesConverted: any[] = [];
       filesConverted = await this.convertImagenes(files.filter(f => (/\.(gif|jpe?g|tiff?|png|webp|bmp|heic|heif)$/i).test(f.name)));
 
-      if (filesConverted.length > 0){
+      if (filesConverted.length > 0) {
 
         this.ngxPicaService.resizeImages(filesConverted, 1200, 880).subscribe({
           next: (imageResized: File) => {
-            // console.log(imageResized)
             let name = imageResized["name"];
             result.push(this.blobToFile(imageResized, name))
           },
@@ -291,13 +294,21 @@ export class PresupuestosPage implements OnInit {
 
   private blobToFile = (theBlob: Blob, fileName: string): File => {
     return new File([theBlob], fileName);
+  }
 
-    let b: any = theBlob;
-    //A Blob() is almost a File() - it's just missing the two properties below which we will add
-    b.lastModified = new Date();
-    b.name = fileName;
-    //Cast to a File() type
-    return <File>b;
+  generarFileName(iteration: number, fileExtension:string): string {
+
+    let res = "";
+
+    const presupuestoName = this.Presupuesto.Presupuesto;
+    const ahora = new Date().getTime();
+
+    res = presupuestoName + "_" + ahora
+    res += iteration;
+
+    res += fileExtension;
+
+    return res;
   }
 
   //#endregion

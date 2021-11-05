@@ -25,7 +25,7 @@ export class LoginService {
     })
   }
 
-  public setLogin(loginRes: LoginResult, codigo: string, user: string, password: string) {
+  public setLogin(loginRes: LoginResult, codigo: string, user: string) {
     this.usuario = new UserModel;
 
     this.usuario.NombreCompleto = user;

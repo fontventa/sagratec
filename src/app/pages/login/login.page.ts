@@ -11,6 +11,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { NavParamsService } from '../../services/nav-params.service';
 import { GlobalService } from '../../services/global.service';
 import { AppComponent } from '../../app.component';
+import UserModel from '../../../models/login/UserModel';
 
 @Component({
   selector: 'app-login',
@@ -70,7 +71,7 @@ export class LoginPage implements OnInit {
 
         if (loginRes && loginRes.Token) {
 
-          this.api.Login.setLogin(loginRes, this.codigo, this.user, this.password);
+          this.api.Login.setLogin(loginRes, this.codigo, this.user);
 
           await this.alertService.hideLoading();
 
@@ -98,7 +99,6 @@ export class LoginPage implements OnInit {
     try {
 
       const token = localStorage.getItem('token');
-      this.api.loginToken = token;
 
       const ogidoccetargas = localStorage.getItem('ogidoccetargas');
       const emanresucetargas = localStorage.getItem('emanresucetargas');
@@ -112,7 +112,16 @@ export class LoginPage implements OnInit {
 
         await this.alertService.showLoading('Iniciando sesión...');
 
-          this.api.logged = true;
+        //Seteamos las variables del login
+        this.api.Login.usuario = new UserModel;
+
+        this.api.Login.usuario.NombreCompleto = emanresucetargas;
+        this.api.Login.usuario.Codigo = ogidoccetargas;
+        this.api.Login.usuario.Token = token;
+
+        //Seteamos las variables de la api
+        this.api.loginToken = token;
+        this.api.logged = true;
 
         await this.alertService.hideLoading();
 

@@ -52,7 +52,7 @@
 
         <ion-list *ngIf="buscando">
 
-          <ion-title [ngClass]="{'titlesPresupuesto':true}">Clientes</ion-title>
+          <ion-title class="titlesPresupuesto">Clientes</ion-title>
           <ion-item>
             <ion-label>Nuestro cliente: {{Presupuesto.NuestroCliente}} - {{Presupuesto.nuestroClienteRazonSocial}}</ion-label>
           </ion-item>
@@ -66,16 +66,21 @@
             <ion-label>Nombre cliente: {{Presupuesto.NombreCliente}}</ion-label>
           </ion-item>
 
-          <ion-title [ngClass]="{'titlesPresupuesto':true}">Documentos</ion-title>
+          <ion-title class="titlesPresupuesto">Documentos</ion-title>
           <ion-item>
             <ion-label>Selecciona el tipo de fichero a subir</ion-label>
           </ion-item>
 
           <ion-item>
 			  <div class="botonera">
-				<ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Instalaciones', 'btN': true}">Instalaciones</ion-button>
-				<ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Conformes', 'btN': true}">OTT</ion-button>
-				<ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Medidas', 'btN': true}">Hoja de medidas</ion-button>
+				<ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Instalaciones', 'btN': true}">Instalaciones</ion-button>
+				<ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Conformes', 'btN': true}">OTT</ion-button>
+				<ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Medidas', 'btN': true}">Hoja de medidas</ion-button>
+				<!--
+					<ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Instalaciones', 'btN': true}">Instalaciones</ion-button>
+				<ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Conformes', 'btN': true}">OTT</ion-button>
+				<ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Medidas', 'btN': true}">Hoja de medidas</ion-button>
+				-->
 			  </div>
             
           </ion-item>
@@ -88,10 +93,6 @@
 
 			<ion-checkbox formControlName="MantenerNombres" [(ngModel)]="mantenerNombres"></ion-checkbox>
             <ion-label class="ml-2">Mantener nombre original de los ficheros</ion-label>
-          </ion-item>
-
-          <ion-item *ngIf="carpetaFicheros != undefined && carpetaFicheros != null && carpetaFicheros != ''">
-            
           </ion-item>
 
           <ion-item *ngFor="let fic of Presupuesto.archivos">

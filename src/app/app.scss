@@ -921,9 +921,12 @@ table th[class*="col-"] {
     text-overflow: ellipsis;
 }
 
+
 // RESPONSIVE *********************
 // Extra small devices (portrait phones, less than 576px)
+  
 @media (max-width: 575.98px) {
+  
   ion-app{
     max-width: 100%;
   }
@@ -993,6 +996,9 @@ table th[class*="col-"] {
     margin-left: auto;
     margin-right: auto;
   }
+
+  
+
 }
 
 @media (min-width: 768px) {
@@ -1009,6 +1015,9 @@ table th[class*="col-"] {
       --max-width: 370px;
     }
   }
+  
+
+
 }
 
 
@@ -1120,5 +1129,12 @@ background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(199,199,199,1) 0%, r
       --border-radius: 12px;
       height: 45px;
     }
+  }
+}
+
+@media (min-width: 576px){
+  .popover-wrapper .popover-content{
+      left: initial !important;
+      right: 16px;
   }
 }

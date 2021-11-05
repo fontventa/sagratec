@@ -124,8 +124,6 @@ export class AppComponent {
       this.api.Login.logOut();
       this.navParams.clear(true);
 
-      await this.alertService.hideLoading();
-
       this.nav.navigateRoot("login");
 
     } catch (ex) {

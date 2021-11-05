@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import LoginResult from '../../../models/login/loginResult.model';
 import UserModel from '../../../models/login/UserModel';
+import { AlertService } from '../../services/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,9 @@ export class LoginService {
 
   public usuario: UserModel;
 
-  constructor() { }
+  constructor(
+    public alertService: AlertService,
+  ) { }
 
   public async login(codigo: string, user: string, password: string): Promise<LoginResult> {
     return await this.api.HttpPost<LoginResult>('/sagrateclogin', {
@@ -22,7 +25,7 @@ export class LoginService {
     })
   }
 
-  public setLogin(loginRes: LoginResult, codigo: string, user: string, password: string) {
+  public setLogin(loginRes: LoginResult, codigo: string, user: string) {
     this.usuario = new UserModel;
 
     this.usuario.NombreCompleto = user;
@@ -34,7 +37,6 @@ export class LoginService {
     localStorage.setItem('token', loginRes.Token);
     localStorage.setItem('ogidoccetargas', codigo);
     localStorage.setItem('emanresucetargas', user);
-    localStorage.setItem('drowssapcetargas', password);
 
     this.api.logged = true;
   }
@@ -48,7 +50,18 @@ export class LoginService {
     localStorage.removeItem('token');
     localStorage.removeItem('ogidoccetargas');
     localStorage.removeItem('emanresucetargas');
-    localStorage.removeItem('drowssapcetargas');
+
+    this.alertService.hideAllLoadings();
+
+  }
+
+  public clearToken(){
+
+    this.api.loginToken = null;
+
+    localStorage.removeItem('token');
+
+    this.alertService.hideAllLoadings();
 
   }
 

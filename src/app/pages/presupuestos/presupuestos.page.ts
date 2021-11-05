@@ -8,6 +8,7 @@ import PresupuestosSeriesModel from '../../../models/presupuestos/PresupuestosSe
 import { NgxPicaService } from '@digitalascetic/ngx-pica';
 import heic2any from "heic2any";
 import PresupuestosArchivosModel from '../../../models/presupuestos/PresupuestosArchivosModel';
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-presupuestos',
@@ -57,18 +58,26 @@ export class PresupuestosPage implements OnInit {
 
   private async init() {
 
-    await this.alertService.showLoading('Cargando...');
+    try {
 
-    //Ficheros
-    var me = this;
-    window["callbackSubirFichero"] = (e: any) => {
-      this.enviarFichero.call(me);
+      await this.alertService.showLoading('Cargando...');
+
+      //Ficheros
+      var me = this;
+      window["callbackSubirFichero"] = (e: any) => {
+        this.enviarFichero.call(me);
+      }
+
+      //Cargamos las series
+      this.series = await this.service.Presupuesto.getNumerosSerie();
+
+      this.ready = true
+
+    } catch (ex) {
+
+      await this.alertService.showToastError(ex.Message);
+
     }
-
-    //Cargamos las series
-    this.series = await this.service.Presupuesto.getNumerosSerie();
-
-    this.ready = true
 
     await this.alertService.hideLoading();
 
@@ -90,6 +99,7 @@ export class PresupuestosPage implements OnInit {
         this.Presupuesto.nuestroClienteRazonSocial = nuestroCliente.RazonSocial;
 
         //Llamamos a obtener los ficheros de las tres carpetas ya que el get de estas las creará si no existen
+        await this.service.Presupuesto.getFicherosRaiz(this.Presupuesto.Serie, this.Presupuesto.Presupuesto);
         await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, "Instalaciones");
         await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, "Conformes");
         await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, "Medidas");
@@ -146,18 +156,28 @@ export class PresupuestosPage implements OnInit {
 
       await this.alertService.showLoading('Descargando fichero...');
 
-      const data = await this.service.Presupuesto.downloadFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, this.carpetaFicheros, fichero.NombreCompleto);
+      await $.ajax({
+        type: "GET",
+        url: this.service.URL + '/ArchivosAFS/DownloadFile/Presupuestos/' + (this.Presupuesto.Serie != undefined && this.Presupuesto.Serie != null && this.Presupuesto.Serie != "" ? this.Presupuesto.Serie : "") + this.Presupuesto.Presupuesto + "/?subdirectorios=" + this.carpetaFicheros + "&archivo=" + fichero.NombreCompleto,
+        headers: {
+          'sgtToken': this.service.loginToken
+        },
+        xhrFields: {
+          responseType: 'blob'
+        },
+        success: function (blob) {
+          var windowUrl = window.URL || window["webkitURL"];
+          var url = windowUrl.createObjectURL(blob);
 
-      const blob: File = new File([data], fichero.NombreCompleto);
-
-      var a = document.createElement('a');
-      var url = window.URL.createObjectURL(blob);
-      a.href = url;
-      a.download = fichero.NombreCompleto;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
+          var link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fichero.NombreCompleto;
+          link.click();
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      });
 
     } catch (ex) {
       console.log(ex)

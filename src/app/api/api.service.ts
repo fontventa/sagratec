@@ -64,17 +64,36 @@ export class ApiService {
           resolve(res)
         }
       }, (err) => {
+
         if (err.status == 403 && url != '/sagrateclogin') {
+
+          this.Login.clearToken();
           this.navCtrl.navigateRoot("login");
+
         } else {
 
           if (err.error.Message) {
-            reject({ Message: err.error.Message });
-          } else if (err.error.Caption) {
-            reject({ Message: err.error.Caption });
-          }
 
-          reject(err);
+            if (err.error.Message == "Error en el token de seguridad.") {
+
+              this.Login.clearToken();
+              this.navCtrl.navigateRoot("login");
+
+            } else {
+
+              reject({ Message: err.error.Message });
+
+            }
+
+          } else if (err.error.Caption) {
+
+            reject({ Message: err.error.Caption });
+
+          } else {
+
+            reject(err);
+
+          }
 
         }
       })
@@ -109,17 +128,39 @@ export class ApiService {
           resolve(res)
         }
       }, (err) => {
+
         if (err.status == 403 && url != '/sagrateclogin') {
+
+          this.Login.clearToken();
           this.navCtrl.navigateRoot("login");
+
         } else {
+
           if (err.error.Message) {
-            reject({ Message: err.error.Message });
+
+            if (err.error.Message == "Error en el token de seguridad.") {
+
+              this.Login.clearToken();
+              this.navCtrl.navigateRoot("login");
+
+            } else {
+
+              reject({ Message: err.error.Message });
+
+            }
+
           } else if (err.error.Caption) {
+
             reject({ Message: err.error.Caption });
+
+          } else {
+
+            reject(err);
+
           }
 
-          reject(err);
         }
+
       })
 
     })

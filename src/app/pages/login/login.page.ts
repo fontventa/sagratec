@@ -11,6 +11,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx'
 import { NavParamsService } from '../../services/nav-params.service';
 import { GlobalService } from '../../services/global.service';
 import { AppComponent } from '../../app.component';
+import UserModel from '../../../models/login/UserModel';
 
 @Component({
   selector: 'app-login',
@@ -70,9 +71,9 @@ export class LoginPage implements OnInit {
 
         if (loginRes && loginRes.Token) {
 
-          this.api.Login.setLogin(loginRes, this.codigo, this.user, this.password);
+          this.api.Login.setLogin(loginRes, this.codigo, this.user);
 
-          this.alertService.hideLoading();
+          await this.alertService.hideLoading();
 
           await AppComponent.instance.executeMenu();
           this.navCtrl.navigateRoot('presupuestos');
@@ -98,34 +99,34 @@ export class LoginPage implements OnInit {
     try {
 
       const token = localStorage.getItem('token');
-      this.api.loginToken = token;
 
       const ogidoccetargas = localStorage.getItem('ogidoccetargas');
       const emanresucetargas = localStorage.getItem('emanresucetargas');
-      const drowssapcetargas = localStorage.getItem('drowssapcetargas');
+
+      this.codigo = ogidoccetargas;
+      this.user = emanresucetargas;
 
       if (token != null && token != undefined && token != "" &&
         ogidoccetargas != null && ogidoccetargas != undefined && ogidoccetargas != "" &&
-        emanresucetargas != null && emanresucetargas != undefined && emanresucetargas != "" &&
-        drowssapcetargas != null && drowssapcetargas != undefined && drowssapcetargas != "") {
+        emanresucetargas != null && emanresucetargas != undefined && emanresucetargas != "") {
 
         await this.alertService.showLoading('Iniciando sesión...');
-        const loginRes = await this.api.Login.login(ogidoccetargas, emanresucetargas, drowssapcetargas);
 
-        if (loginRes && loginRes.Token) {
+        //Seteamos las variables del login
+        this.api.Login.usuario = new UserModel;
 
-          this.api.Login.setLogin(loginRes, ogidoccetargas, emanresucetargas, drowssapcetargas);
+        this.api.Login.usuario.NombreCompleto = emanresucetargas;
+        this.api.Login.usuario.Codigo = ogidoccetargas;
+        this.api.Login.usuario.Token = token;
 
-          this.alertService.hideLoading();
+        //Seteamos las variables de la api
+        this.api.loginToken = token;
+        this.api.logged = true;
 
-          await AppComponent.instance.executeMenu();
-          this.navCtrl.navigateRoot('presupuestos');
+        await this.alertService.hideLoading();
 
-        } else {
-
-          throw "Error en el login";
-
-        }
+        await AppComponent.instance.executeMenu();
+        this.navCtrl.navigateRoot('presupuestos');
 
       }
 
@@ -136,8 +137,6 @@ export class LoginPage implements OnInit {
 
       this.api.Login.logOut();
       this.navParams.clear(true);
-
-      await this.alertService.hideLoading();
 
     }
 

@@ -35,6 +35,14 @@ export class PresupuestosService {
 
   }
 
+  public async getFicherosRaiz(serie: string, presupuesto: string): Promise<PresupuestosArchivosModel[]> {
+    const token = this.api.loginToken;
+
+    return await this.api.HttpGet<PresupuestosArchivosModel[]>('/ArchivosAFS/Presupuestos/' + (serie != undefined && serie != null && serie != "" ? serie : "") + presupuesto, {
+    }, token)
+
+  }
+
   public async getFicherosCarpeta(serie: string, presupuesto: string, subdirectorios: string): Promise<PresupuestosArchivosModel[]> {
     const token = this.api.loginToken;
 
@@ -51,24 +59,6 @@ export class PresupuestosService {
       method: 'POST',
       type: 'POST',
       data: files,
-      contentType: false,
-      processData: false,
-      cache: false
-    }, token)
-
-  }
-
-  public async downloadFicherosCarpeta(serie: string, presupuesto: string, subdirectorios: string, archivo: string): Promise<any> {
-    const token = this.api.loginToken;
-
-    // return await this.api.HttpGet<any>('/ArchivosAFS/DownloadFile/Presupuestos/' + (serie != undefined && serie != null && serie != "" ? serie : "") + presupuesto, {
-    //   subdirectorios: subdirectorios,
-    //   archivo: archivo
-    // }, token)
-
-    return await this.api.PerformRequest<any>('/ArchivosAFS/DownloadFile/Presupuestos/' + (serie != undefined && serie != null && serie != "" ? serie : "") + presupuesto + "/?subdirectorios=" + subdirectorios + "&archivo=" + archivo, {
-      method: 'GET',
-      type: 'GET',
       contentType: false,
       processData: false,
       cache: false

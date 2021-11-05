@@ -55,29 +55,29 @@
 
           <ion-title class="titlesPresupuesto">Clientes</ion-title>
           <ion-item>
-            <ion-label class="Space">
+            <ion-label position="stacked" class="ion-text-wrap">
               <strong> Nuestro cliente</strong>: </ion-label>
-            <ion-label>{{Presupuesto.NuestroCliente}} - {{Presupuesto.nuestroClienteRazonSocial}}</ion-label>
+            <ion-input readonly>{{Presupuesto.NuestroCliente}} - {{Presupuesto.nuestroClienteRazonSocial}}</ion-input>
           </ion-item>
           <ion-item>
-            <ion-label class="Space">
+            <ion-label position="stacked" class="ion-text-wrap">
               <strong> Su presupuesto</strong>:</ion-label>
-            <ion-label> {{Presupuesto.SuPresupuesto}}</ion-label>
+            <ion-input readonly> {{Presupuesto.SuPresupuesto}}</ion-input>
           </ion-item>
           <ion-item>
-            <ion-label class="Space">
+            <ion-label position="stacked" class="ion-text-wrap"> 
               <strong> Su cliente</strong>:</ion-label>
-            <ion-label> {{Presupuesto.SuCliente}}</ion-label>
+            <ion-input readonly> {{Presupuesto.SuCliente}}</ion-input>
           </ion-item>
           <ion-item>
-            <ion-label class="Space">
+            <ion-label position="stacked" class="ion-text-wrap">
               <strong> Nombre cliente</strong>:</ion-label>
-            <ion-label> {{Presupuesto.NombreCliente}}</ion-label>
+            <ion-input readonly> {{Presupuesto.NombreCliente}}</ion-input>
           </ion-item>
 
           <ion-title class="titlesPresupuesto">Documentos</ion-title>
           <ion-item>
-            <ion-label>
+            <ion-label class="ion-text-wrap">
               <strong> Selecciona el tipo de fichero a subir</strong>
             </ion-label>
           </ion-item>

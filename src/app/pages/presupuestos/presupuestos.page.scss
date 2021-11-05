@@ -183,7 +183,7 @@ ion-toolbar{
         color: white;
         justify-content: center;
         border-radius: 7px;
-        font-size: 15px;
+        font-size: 14px;
     }
     .botonera {
         display: flex;
@@ -192,7 +192,7 @@ ion-toolbar{
         margin-top: 9px;
     }
     .botonera .btN {
-        font-size: 15px;
+        font-size: 14px;
         margin: 12px 0 0;
         &:last-child {
             margin-bottom: 20px;
@@ -208,9 +208,16 @@ ion-toolbar{
         color: #dc3545;
     }
     .item.sc-ion-label-ios-h, .item .sc-ion-label-ios-h {
-        font-size: 15px;
+        font-size: 14px;
+        font-weight: initial;
     }
     .ionicon-stroke-width {
         color: white;
+    }
+    .native-input.sc-ion-input-ios {
+        font-size: 14px;
+    }
+    .Space {
+        max-width: 110px;
     }
 }

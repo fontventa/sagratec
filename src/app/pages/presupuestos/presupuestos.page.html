@@ -54,21 +54,21 @@
 
           <ion-title class="titlesPresupuesto">Clientes</ion-title>
           <ion-item>
-            <ion-label>Nuestro cliente: {{Presupuesto.NuestroCliente}} - {{Presupuesto.nuestroClienteRazonSocial}}</ion-label>
+            <ion-label class="Space"><strong> Nuestro cliente</strong>: </ion-label><ion-label>{{Presupuesto.NuestroCliente}} - {{Presupuesto.nuestroClienteRazonSocial}}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Su presupuesto: {{Presupuesto.SuPresupuesto}}</ion-label>
+            <ion-label class="Space"><strong> Su presupuesto</strong>:</ion-label><ion-label> {{Presupuesto.SuPresupuesto}}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Su cliente: {{Presupuesto.SuCliente}}</ion-label>
+            <ion-label class="Space"><strong> Su cliente</strong>:</ion-label> <ion-label> {{Presupuesto.SuCliente}}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Nombre cliente: {{Presupuesto.NombreCliente}}</ion-label>
+            <ion-label class="Space"><strong> Nombre cliente</strong>:</ion-label> <ion-label> {{Presupuesto.NombreCliente}}</ion-label>
           </ion-item>
 
           <ion-title class="titlesPresupuesto">Documentos</ion-title>
           <ion-item>
-            <ion-label>Selecciona el tipo de fichero a subir</ion-label>
+            <ion-label><strong> Selecciona el tipo de fichero a subir</strong></ion-label>
           </ion-item>
 
           <ion-item>
@@ -92,7 +92,7 @@
             />
 
 			<ion-checkbox formControlName="MantenerNombres" [(ngModel)]="mantenerNombres"></ion-checkbox>
-            <ion-label class="ml-2">Mantener nombre original de los ficheros</ion-label>
+            <ion-label class="ml-2">Mantener nombre</ion-label>
           </ion-item>
 
           <ion-item *ngFor="let fic of Presupuesto.archivos">

@@ -58,18 +58,26 @@ export class PresupuestosPage implements OnInit {
 
   private async init() {
 
-    await this.alertService.showLoading('Cargando...');
+    try {
 
-    //Ficheros
-    var me = this;
-    window["callbackSubirFichero"] = (e: any) => {
-      this.enviarFichero.call(me);
+      await this.alertService.showLoading('Cargando...');
+
+      //Ficheros
+      var me = this;
+      window["callbackSubirFichero"] = (e: any) => {
+        this.enviarFichero.call(me);
+      }
+
+      //Cargamos las series
+      this.series = await this.service.Presupuesto.getNumerosSerie();
+
+      this.ready = true
+
+    } catch (ex) {
+
+      await this.alertService.showToastError(ex.Message);
+
     }
-
-    //Cargamos las series
-    this.series = await this.service.Presupuesto.getNumerosSerie();
-
-    this.ready = true
 
     await this.alertService.hideLoading();
 
@@ -91,6 +99,7 @@ export class PresupuestosPage implements OnInit {
         this.Presupuesto.nuestroClienteRazonSocial = nuestroCliente.RazonSocial;
 
         //Llamamos a obtener los ficheros de las tres carpetas ya que el get de estas las creará si no existen
+        await this.service.Presupuesto.getFicherosRaiz(this.Presupuesto.Serie, this.Presupuesto.Presupuesto);
         await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, "Instalaciones");
         await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, "Conformes");
         await this.service.Presupuesto.getFicherosCarpeta(this.Presupuesto.Serie, this.Presupuesto.Presupuesto, "Medidas");

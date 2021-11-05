@@ -72,7 +72,7 @@ export class LoginPage implements OnInit {
 
           this.api.Login.setLogin(loginRes, this.codigo, this.user, this.password);
 
-          this.alertService.hideLoading();
+          await this.alertService.hideLoading();
 
           await AppComponent.instance.executeMenu();
           this.navCtrl.navigateRoot('presupuestos');
@@ -102,30 +102,20 @@ export class LoginPage implements OnInit {
 
       const ogidoccetargas = localStorage.getItem('ogidoccetargas');
       const emanresucetargas = localStorage.getItem('emanresucetargas');
-      const drowssapcetargas = localStorage.getItem('drowssapcetargas');
+
+      this.codigo = ogidoccetargas;
+      this.user = emanresucetargas;
 
       if (token != null && token != undefined && token != "" &&
         ogidoccetargas != null && ogidoccetargas != undefined && ogidoccetargas != "" &&
-        emanresucetargas != null && emanresucetargas != undefined && emanresucetargas != "" &&
-        drowssapcetargas != null && drowssapcetargas != undefined && drowssapcetargas != "") {
+        emanresucetargas != null && emanresucetargas != undefined && emanresucetargas != "") {
 
         await this.alertService.showLoading('Iniciando sesión...');
-        const loginRes = await this.api.Login.login(ogidoccetargas, emanresucetargas, drowssapcetargas);
 
-        if (loginRes && loginRes.Token) {
+        await this.alertService.hideLoading();
 
-          this.api.Login.setLogin(loginRes, ogidoccetargas, emanresucetargas, drowssapcetargas);
-
-          this.alertService.hideLoading();
-
-          await AppComponent.instance.executeMenu();
-          this.navCtrl.navigateRoot('presupuestos');
-
-        } else {
-
-          throw "Error en el login";
-
-        }
+        await AppComponent.instance.executeMenu();
+        this.navCtrl.navigateRoot('presupuestos');
 
       }
 
@@ -136,8 +126,6 @@ export class LoginPage implements OnInit {
 
       this.api.Login.logOut();
       this.navParams.clear(true);
-
-      await this.alertService.hideLoading();
 
     }
 

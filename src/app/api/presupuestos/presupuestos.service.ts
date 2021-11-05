@@ -35,6 +35,14 @@ export class PresupuestosService {
 
   }
 
+  public async getFicherosRaiz(serie: string, presupuesto: string): Promise<PresupuestosArchivosModel[]> {
+    const token = this.api.loginToken;
+
+    return await this.api.HttpGet<PresupuestosArchivosModel[]>('/ArchivosAFS/Presupuestos/' + (serie != undefined && serie != null && serie != "" ? serie : "") + presupuesto, {
+    }, token)
+
+  }
+
   public async getFicherosCarpeta(serie: string, presupuesto: string, subdirectorios: string): Promise<PresupuestosArchivosModel[]> {
     const token = this.api.loginToken;
 

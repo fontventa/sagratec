@@ -112,6 +112,8 @@ export class LoginPage implements OnInit {
 
         await this.alertService.showLoading('Iniciando sesión...');
 
+          this.api.logged = true;
+
         await this.alertService.hideLoading();
 
         await AppComponent.instance.executeMenu();

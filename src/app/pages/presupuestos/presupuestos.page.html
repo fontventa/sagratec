@@ -39,66 +39,79 @@
         </div>
 
         <div class="separadores ml-3">
-          <ion-button (click)="buscarPresupuesto();" *ngIf="!buscando" [disabled]="!(Presupuesto.Presupuesto != undefined && Presupuesto.Presupuesto != null && Presupuesto.Presupuesto != '')" [ngClass]="{'Buscarbtn':true}">Buscar</ion-button>
+          <ion-button (click)="buscarPresupuesto();" *ngIf="!buscando" [disabled]="!(Presupuesto.Presupuesto != undefined && Presupuesto.Presupuesto != null && Presupuesto.Presupuesto != '')"
+            [ngClass]="{'Buscarbtn':true}">Buscar</ion-button>
           <button (click)="cancelarBusquedaPresupuesto();" *ngIf="buscando" [ngClass]="{ 'btnCancelarB': true}">Cancelar busqueda</button>
-		  <!--<ion-button (click)="cancelarBusquedaPresupuesto();" *ngIf="buscando" [ngClass]="{ 'btnCancelarB': true}">Cancelar busqueda</ion-button>-->
+          <!--<ion-button (click)="cancelarBusquedaPresupuesto();" *ngIf="buscando" [ngClass]="{ 'btnCancelarB': true}">Cancelar busqueda</ion-button>-->
         </div>
 
-        
 
-        
 
-        
+
+
+
 
         <ion-list *ngIf="buscando">
 
           <ion-title class="titlesPresupuesto">Clientes</ion-title>
           <ion-item>
-            <ion-label class="Space"><strong> Nuestro cliente</strong>: </ion-label><ion-label>{{Presupuesto.NuestroCliente}} - {{Presupuesto.nuestroClienteRazonSocial}}</ion-label>
+            <ion-label class="Space">
+              <strong> Nuestro cliente</strong>: </ion-label>
+            <ion-label>{{Presupuesto.NuestroCliente}} - {{Presupuesto.nuestroClienteRazonSocial}}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label class="Space"><strong> Su presupuesto</strong>:</ion-label><ion-label> {{Presupuesto.SuPresupuesto}}</ion-label>
+            <ion-label class="Space">
+              <strong> Su presupuesto</strong>:</ion-label>
+            <ion-label> {{Presupuesto.SuPresupuesto}}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label class="Space"><strong> Su cliente</strong>:</ion-label> <ion-label> {{Presupuesto.SuCliente}}</ion-label>
+            <ion-label class="Space">
+              <strong> Su cliente</strong>:</ion-label>
+            <ion-label> {{Presupuesto.SuCliente}}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label class="Space"><strong> Nombre cliente</strong>:</ion-label> <ion-label> {{Presupuesto.NombreCliente}}</ion-label>
+            <ion-label class="Space">
+              <strong> Nombre cliente</strong>:</ion-label>
+            <ion-label> {{Presupuesto.NombreCliente}}</ion-label>
           </ion-item>
 
           <ion-title class="titlesPresupuesto">Documentos</ion-title>
           <ion-item>
-            <ion-label><strong> Selecciona el tipo de fichero a subir</strong></ion-label>
+            <ion-label>
+              <strong> Selecciona el tipo de fichero a subir</strong>
+            </ion-label>
           </ion-item>
 
           <ion-item>
-			  <div class="botonera">
-				<ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Instalaciones', 'btN': true}">Instalaciones</ion-button>
-				<ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Conformes', 'btN': true}">OTT</ion-button>
-				<ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Medidas', 'btN': true}">Hoja de medidas</ion-button>
-				<!--
+            <div class="botonera">
+              <ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Instalaciones', 'btN': true}">Instalaciones</ion-button>
+              <ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Conformes', 'btN': true}">OTT</ion-button>
+              <ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Medidas', 'btN': true}">Hoja de medidas</ion-button>
+              <!--
 					<ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Instalaciones', 'btN': true}">Instalaciones</ion-button>
 				<ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Conformes', 'btN': true}">OTT</ion-button>
 				<ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonInactive': carpetaFicheros != 'Medidas', 'btN': true}">Hoja de medidas</ion-button>
 				-->
-			  </div>
-            
+            </div>
+
           </ion-item>
 
           <ion-item *ngIf="carpetaFicheros != undefined && carpetaFicheros != null && carpetaFicheros != ''">
-            <ion-button (click)="performClick('inputFile')"  [ngClass]="{'Elcheck':true}">+ Ficheros</ion-button>
+            <ion-button (click)="performClick('inputFile')" [ngClass]="{'Elcheck':true}">+ Ficheros</ion-button>
 
             <input id="inputFile" style="display: none;" multiple type="file" no-margin formControlName="doc" onchange="callbackSubirFichero();"
             />
 
-			<ion-checkbox formControlName="MantenerNombres" [(ngModel)]="mantenerNombres"></ion-checkbox>
-            <ion-label class="ml-2">Mantener nombre</ion-label>
+            <ion-checkbox formControlName="MantenerNombres" [(ngModel)]="mantenerNombres"></ion-checkbox>
+            <ion-label class="ml-2" (click)="mantenerNombres = !mantenerNombres;">Mantener nombre</ion-label>
           </ion-item>
 
           <ion-item *ngFor="let fic of Presupuesto.archivos">
             <ion-label (click)="descargarFichero(fic);">{{fic.Nombre}}</ion-label>
-            <button (click)="borrarFichero(fic)" [ngClass]="{'Close':true}"><i class="fas fa-times-circle"></i></button>
-			<!--<ion-button (click)="borrarFichero(fic)" [ngClass]="{'Close':true}"><i class="fas fa-times"></i></ion-button>-->
+            <button (click)="borrarFichero(fic)" [ngClass]="{'Close':true}">
+              <i class="fas fa-times-circle"></i>
+            </button>
+            <!--<ion-button (click)="borrarFichero(fic)" [ngClass]="{'Close':true}"><i class="fas fa-times"></i></ion-button>-->
           </ion-item>
 
         </ion-list>

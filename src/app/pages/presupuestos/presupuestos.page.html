@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start" class="botondeAtras">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button [ngClass]="{ 'MenuBTN': true}"></ion-menu-button>
     </ion-buttons>
     <ion-title>
       Presupuestos
@@ -20,26 +20,39 @@
 
       <form [formGroup]="myForm">
 
-        <ion-item>
-          <ion-label>Numero de serie</ion-label>
-          <ion-select formControlName="Serie" [(ngModel)]="Presupuesto.Serie" interface="popover" [disabled]="buscando">
-            <ion-select-option *ngFor="let item of series" [value]="item.Serie">
-              {{item.Serie}}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
+        <div class="separadores">
+          <ion-item>
+            <ion-label>Numero de serie</ion-label>
+            <ion-select formControlName="Serie" [(ngModel)]="Presupuesto.Serie" interface="popover" [disabled]="buscando">
+              <ion-select-option *ngFor="let item of series" [value]="item.Serie">
+                {{item.Serie}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
 
-        <ion-item>
-          <ion-label>Presupuesto</ion-label>
-          <ion-input formControlName="Presupuesto" [(ngModel)]="Presupuesto.Presupuesto" [disabled]="buscando"></ion-input>
-        </ion-item>
+        <div class="separadores">
+          <ion-item>
+            <ion-label>Presupuesto</ion-label>
+            <ion-input formControlName="Presupuesto" [(ngModel)]="Presupuesto.Presupuesto" [disabled]="buscando"></ion-input>
+          </ion-item>
+        </div>
 
-        <ion-button (click)="buscarPresupuesto();" *ngIf="!buscando" [disabled]="!(Presupuesto.Presupuesto != undefined && Presupuesto.Presupuesto != null && Presupuesto.Presupuesto != '')">Buscar</ion-button>
-        <ion-button (click)="cancelarBusquedaPresupuesto();" *ngIf="buscando">Cancelar busqueda</ion-button>
+        <div class="separadores ml-3">
+          <ion-button (click)="buscarPresupuesto();" *ngIf="!buscando" [disabled]="!(Presupuesto.Presupuesto != undefined && Presupuesto.Presupuesto != null && Presupuesto.Presupuesto != '')" [ngClass]="{'Buscarbtn':true}">Buscar</ion-button>
+          <button (click)="cancelarBusquedaPresupuesto();" *ngIf="buscando" [ngClass]="{ 'btnCancelarB': true}">Cancelar busqueda</button>
+		  <!--<ion-button (click)="cancelarBusquedaPresupuesto();" *ngIf="buscando" [ngClass]="{ 'btnCancelarB': true}">Cancelar busqueda</ion-button>-->
+        </div>
+
+        
+
+        
+
+        
 
         <ion-list *ngIf="buscando">
 
-          <ion-title>Clientes</ion-title>
+          <ion-title [ngClass]="{'titlesPresupuesto':true}">Clientes</ion-title>
           <ion-item>
             <ion-label>Nuestro cliente: {{Presupuesto.NuestroCliente}} - {{Presupuesto.nuestroClienteRazonSocial}}</ion-label>
           </ion-item>
@@ -53,32 +66,38 @@
             <ion-label>Nombre cliente: {{Presupuesto.NombreCliente}}</ion-label>
           </ion-item>
 
-          <ion-title>Documentos</ion-title>
+          <ion-title [ngClass]="{'titlesPresupuesto':true}">Documentos</ion-title>
           <ion-item>
             <ion-label>Selecciona el tipo de fichero a subir</ion-label>
           </ion-item>
 
           <ion-item>
-            <ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Instalaciones', 'pruebas': true}">Instalaciones</ion-button>
-            <ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Conformes'}">OTT</ion-button>
-            <ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Medidas'}">Hoja de medidas</ion-button>
+			  <div class="botonera">
+				<ion-button (click)="loadArchivos('Instalaciones');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Instalaciones', 'btN': true}">Instalaciones</ion-button>
+				<ion-button (click)="loadArchivos('Conformes');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Conformes', 'btN': true}">OTT</ion-button>
+				<ion-button (click)="loadArchivos('Medidas');" [ngClass]="{ 'botonSeleccionado': carpetaFicheros == 'Medidas', 'btN': true}">Hoja de medidas</ion-button>
+			  </div>
+            
           </ion-item>
 
           <ion-item *ngIf="carpetaFicheros != undefined && carpetaFicheros != null && carpetaFicheros != ''">
-            <ion-button (click)="performClick('inputFile')" >Subir ficheros</ion-button>
+            <ion-button (click)="performClick('inputFile')"  [ngClass]="{'Elcheck':true}">+ Ficheros</ion-button>
 
             <input id="inputFile" style="display: none;" multiple type="file" no-margin formControlName="doc" onchange="callbackSubirFichero();"
             />
+
+			<ion-checkbox formControlName="MantenerNombres" [(ngModel)]="mantenerNombres"></ion-checkbox>
+            <ion-label class="ml-2">Mantener nombre original de los ficheros</ion-label>
           </ion-item>
 
           <ion-item *ngIf="carpetaFicheros != undefined && carpetaFicheros != null && carpetaFicheros != ''">
-            <ion-checkbox formControlName="MantenerNombres" [(ngModel)]="mantenerNombres"></ion-checkbox>
-            <ion-label>Mantener nombre original de los ficheros</ion-label>
+            
           </ion-item>
 
           <ion-item *ngFor="let fic of Presupuesto.archivos">
             <ion-label (click)="descargarFichero(fic);">{{fic.Nombre}}</ion-label>
-            <ion-button (click)="borrarFichero(fic)" >Borrar fichero</ion-button>
+            <button (click)="borrarFichero(fic)" [ngClass]="{'Close':true}"><i class="fas fa-times-circle"></i></button>
+			<!--<ion-button (click)="borrarFichero(fic)" [ngClass]="{'Close':true}"><i class="fas fa-times"></i></ion-button>-->
           </ion-item>
 
         </ion-list>

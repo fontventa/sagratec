@@ -1,4 +1,8 @@
 <ion-app>
+  <div class="spinner-container spinnerCustom" *ngIf="alertService.globalSearching.length > 0">
+    <ion-spinner></ion-spinner>
+    <p class="mt-2">{{alertService.globalSearchingText}}</p>
+  </div>
   <!--when="(max-width: 575px)"-->
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" class="menuCustom" type="overlay">
@@ -62,13 +66,14 @@
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content" [swipeGesture]="true">
-      <div class="spinner-container spinnerCustom" *ngIf="alertService.globalSearching.length > 0">
+      <!--<div class="spinner-container spinnerCustom" *ngIf="alertService.globalSearching.length > 0">
         <ion-spinner></ion-spinner>
         <p class="mt-2">{{alertService.globalSearchingText}}</p>
-      </div>
+      </div>-->
     </ion-router-outlet>
   </ion-split-pane>
 </ion-app>
+
 <!-- 
 <ion-app>
   <ion-router-outlet></ion-router-outlet>

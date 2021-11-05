@@ -10,7 +10,7 @@
 .boxLogin {
   position: relative;
   height: 100%;
-  // background-image: url(/assets/images/bg-login.jpg);
+  background-image: url(/assets/images/bg-login.jpg);
   background-size: cover;
   background-position: right bottom;
   &:after{
@@ -29,8 +29,8 @@
     content: '';
     width: 100%;
     height: 100%;
-    /*background-image: linear-gradient(to right top, #1616a8, #1324b2, #102fbc, #0b3ac5, #0645cf, #0645cf, #0645cf, #0645cf, #0b3ac5, #102fbc, #1324b2, #1616a8);*/
-    background-image: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(201,112,203,1) 0%, rgba(144,78,145,1) 100%);
+    /*background-image: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(201,112,203,1) 0%, rgba(144,78,145,1) 100%);
+    background-image: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(199,199,199,1) 0%, rgba(80,80,80,1) 100%);*/
     position: absolute;
     opacity: 1;
     z-index: 1;
@@ -107,12 +107,12 @@ position: absolute;
   padding-top: 22px;
   padding-bottom: 22px;
   i{
-      font-size: 45px;
+      font-size: 30px;
       position: absolute;
       left: 12px;
       top: 50%;
       margin-top: -14px;
-      color: #c970cb ;
+      color: #904E91;
   }
 }
 

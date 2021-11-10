@@ -290,7 +290,7 @@ export class PresupuestosPage implements OnInit {
 
       if (filesConverted.length > 0) {
 
-        let ngxOpt = { exifOptions: { forceExifOrientation: false } }
+        let ngxOpt = { exifOptions: { forceExifOrientation: false }, aspectRatio: { keepAspectRatio: true } }
 
         this.ngxPicaService.resizeImages(filesConverted, 1200, 880, ngxOpt).subscribe({
           next: (imageResized: File) => {

@@ -34,7 +34,7 @@
         <div class="separadores">
           <ion-item>
             <ion-label>Presupuesto</ion-label>
-            <ion-input formControlName="Presupuesto" [(ngModel)]="Presupuesto.Presupuesto" [disabled]="buscando"></ion-input>
+            <ion-input inputmode="numeric" formControlName="Presupuesto" [(ngModel)]="Presupuesto.Presupuesto" [disabled]="buscando" ></ion-input>
           </ion-item>
         </div>
 
@@ -107,7 +107,7 @@
           </ion-item>
 
           <ion-item *ngFor="let fic of Presupuesto.archivos">
-            <ion-label (click)="descargarFichero(fic);">{{fic.Nombre}}</ion-label>
+            <ion-label (click)="descargarFichero(fic);">{{fic.NombreCompleto}}</ion-label>
             <button (click)="borrarFichero(fic)" [ngClass]="{'Close':true}">
               <i class="fas fa-times-circle"></i>
             </button>

@@ -290,7 +290,9 @@ export class PresupuestosPage implements OnInit {
 
       if (filesConverted.length > 0) {
 
-        this.ngxPicaService.resizeImages(filesConverted, 1200, 880).subscribe({
+        let ngxOpt = { exifOptions: { forceExifOrientation: false } }
+
+        this.ngxPicaService.resizeImages(filesConverted, 1200, 880, ngxOpt).subscribe({
           next: (imageResized: File) => {
             let name = imageResized["name"];
             result.push(this.blobToFile(imageResized, name))

@@ -269,7 +269,7 @@ export class PresupuestosPage implements OnInit {
 
       } catch (ex) {
 
-        this.alertService.showToastError("Ha ocurrido un error al subir los ficheros")
+        this.alertService.showToastError(ex)
         input['value'] = "";
 
         await this.alertService.hideLoading();

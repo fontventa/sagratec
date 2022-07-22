@@ -299,7 +299,7 @@ export class PresupuestosPage implements OnInit {
           },
           error: error => {
             console.log(error);
-            reject("Error al comrpimir la imagen");
+            reject("Error al comprimir la imagen: " + error);
           },
           complete: () => {
             console.log(result)
